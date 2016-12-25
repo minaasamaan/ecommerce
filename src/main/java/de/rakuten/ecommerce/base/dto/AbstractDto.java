@@ -1,0 +1,26 @@
+/**
+ * 
+ */
+package de.rakuten.ecommerce.base.dto;
+
+/**
+ * @author Mina
+ *
+ */
+public abstract class AbstractDto implements Dto {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+}
