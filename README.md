@@ -1,4 +1,5 @@
 # Rakuten Products Management Solution
+Rest API for managing products &amp; categories in a secured context
 
 ## Guide
 
