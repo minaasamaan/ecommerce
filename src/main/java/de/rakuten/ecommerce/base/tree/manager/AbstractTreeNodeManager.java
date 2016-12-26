@@ -3,7 +3,10 @@
  */
 package de.rakuten.ecommerce.base.tree.manager;
 
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
 import de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager;
+import de.rakuten.ecommerce.base.tree.exception.CannotDeleteNonLeafNodes;
 import de.rakuten.ecommerce.base.tree.model.TreeNode;
 
 /**
@@ -18,18 +21,17 @@ public abstract class AbstractTreeNodeManager<Node extends TreeNode<Node>> exten
 	@Override
 	protected void doBeforePersist(Node node, boolean isNew) {
 		if (node.getParentId() != null) {
-			// Ensure parent exists
-			read(node.getParentId());
+			// Ensure parent exists, inject it in the entity
+			Node parent = read(node.getParentId());
+			node.setParent(parent);
 		}
 	}
 
 	@Override
 	protected void doBeforeDelete(Node node) {
-		if (node.getParent() != null) {
-			// Ensure parent exists
-			Node parent = read(node.getParent().getId());
-			parent.getChildren().addAll(node.getChildren());
-			update(parent);
+		TransactionSynchronizationManager.isActualTransactionActive();
+		if (node.getChildren() != null && !node.getChildren().isEmpty()) {
+			throw new CannotDeleteNonLeafNodes(node.getId());
 		}
 	}
 }

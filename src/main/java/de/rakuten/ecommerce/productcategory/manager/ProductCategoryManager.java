@@ -4,7 +4,7 @@
 package de.rakuten.ecommerce.productcategory.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import de.rakuten.ecommerce.base.tree.manager.AbstractTreeNodeManager;
 import de.rakuten.ecommerce.productcategory.model.ProductCategory;
@@ -14,8 +14,7 @@ import de.rakuten.ecommerce.productcategory.repository.ProductCategoryRepository
  * @author Mina
  *
  */
-@Component
-// @Transactional FIXME
+@Service
 public class ProductCategoryManager extends AbstractTreeNodeManager<ProductCategory> {
 
 	@Autowired
@@ -34,8 +33,9 @@ public class ProductCategoryManager extends AbstractTreeNodeManager<ProductCateg
 
 	@Override
 	protected void doBeforeDelete(ProductCategory productCategory) {
-		// check here if category has any products already, and hence it can't
-		// be deleted
+		// TODO check here if category has any products already, and hence it
+		// can't
+		// be deleted, throw CannotDeleteCategoryAssignedToProducts
 		super.doBeforeDelete(productCategory);
 	}
 }

@@ -4,7 +4,7 @@
 package de.rakuten.ecommerce.product.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import de.rakuten.ecommerce.base.context.ApplicationConfigurations;
 import de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager;
@@ -16,8 +16,7 @@ import de.rakuten.ecommerce.product.repository.ProductRepository;
  * @author Mina
  *
  */
-@Component
-// @Transactional
+@Service
 public class ProductManager extends AbstractBusinessEntityManager<Product> {
 
 	@Autowired
@@ -52,8 +51,8 @@ public class ProductManager extends AbstractBusinessEntityManager<Product> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager#getEntityDao()
+	 * @see de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager#
+	 * getEntityDao()
 	 */
 	@Override
 	public ProductRepository getEntityRepository() {

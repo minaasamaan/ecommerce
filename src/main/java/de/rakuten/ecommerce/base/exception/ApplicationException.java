@@ -1,72 +1,62 @@
+/**
+ * 
+ */
 package de.rakuten.ecommerce.base.exception;
 
+import org.springframework.http.HttpStatus;
+
 /**
- * Parent exception for all application exceptions
- * 
  * @author Mina
  *
  */
 public abstract class ApplicationException extends RuntimeException {
 
-	private Class<?> source;
-	private Throwable wrappedException;
-	private RootCause rootCause;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private HttpStatus httpStatus;
+
+	private String message;
+
 	/**
-	 * 
+	 * @param httpStatus
+	 * @param message
 	 */
-	public ApplicationException(Throwable exception, RootCause rootCause, Class<?> source) {
-		setRootCause(rootCause);
-		setSource(source);
-		setWrappedException(exception);
+	public ApplicationException(HttpStatus httpStatus, String message) {
+		this.setHttpStatus(httpStatus);
+		this.setMessage(message);
 	}
 
 	/**
-	 * @return the source
+	 * @return the message
 	 */
-	public Class<?> getSource() {
-		return source;
+	@Override
+	public String getMessage() {
+		return message;
 	}
 
 	/**
-	 * @param source
-	 *            the source to set
+	 * @param message
+	 *            the message to set
 	 */
-	public void setSource(Class<?> source) {
-		this.source = source;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	/**
-	 * @return the rootCause
+	 * @return the httpStatus
 	 */
-	public RootCause getRootCause() {
-		return rootCause;
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
 	}
 
 	/**
-	 * @param rootCause
-	 *            the rootCause to set
+	 * @param httpStatus
+	 *            the httpStatus to set
 	 */
-	public void setRootCause(RootCause rootCause) {
-		this.rootCause = rootCause;
-	}
-
-	/**
-	 * @return the wrappedException
-	 */
-	public Throwable getWrappedException() {
-		return wrappedException;
-	}
-
-	/**
-	 * @param wrappedException
-	 *            the wrappedException to set
-	 */
-	public void setWrappedException(Throwable wrappedException) {
-		this.wrappedException = wrappedException;
+	public void setHttpStatus(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
 	}
 }

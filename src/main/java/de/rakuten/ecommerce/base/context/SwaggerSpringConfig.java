@@ -4,6 +4,7 @@
 package de.rakuten.ecommerce.base.context;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -23,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableWebMvc
+@ComponentScan(basePackageClasses = { SwaggerSpringConfig.class })
 @EnableSwagger2
 public class SwaggerSpringConfig extends WebMvcConfigurerAdapter {
 	@Bean

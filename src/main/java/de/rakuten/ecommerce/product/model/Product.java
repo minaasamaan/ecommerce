@@ -4,9 +4,11 @@
 package de.rakuten.ecommerce.product.model;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import de.rakuten.ecommerce.base.model.AbstractEntity;
+import de.rakuten.ecommerce.productcategory.model.ProductCategory;
 
 /**
  * @author Mina
@@ -22,7 +24,8 @@ public class Product extends AbstractEntity {
 
 	private String name;
 
-	private String category;
+	@ManyToOne
+	private ProductCategory productCategory;
 
 	private Double price;
 
@@ -42,21 +45,6 @@ public class Product extends AbstractEntity {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the category
-	 */
-	public String getCategory() {
-		return category;
-	}
-
-	/**
-	 * @param category
-	 *            the category to set
-	 */
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	/**
@@ -87,6 +75,21 @@ public class Product extends AbstractEntity {
 	 */
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	/**
+	 * @return the productCategory
+	 */
+	public ProductCategory getProductCategory() {
+		return productCategory;
+	}
+
+	/**
+	 * @param productCategory
+	 *            the productCategory to set
+	 */
+	public void setProductCategory(ProductCategory productCategory) {
+		this.productCategory = productCategory;
 	}
 
 }

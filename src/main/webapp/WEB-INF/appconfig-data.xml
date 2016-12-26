@@ -42,13 +42,13 @@
     </bean>
 
     <!-- Enable annotation driven transaction management -->
-    <tx:annotation-driven/>
+    <tx:annotation-driven proxy-target-class="true"/>
 
     <!--
       Configure Spring Data JPA and set the base package of the
       repository interfaces
     -->
 
-    <jpa:repositories base-package="de.rakuten.ecommerce"/>
+    <jpa:repositories base-package="de.rakuten.ecommerce.*.repository"/>
 
 </beans>

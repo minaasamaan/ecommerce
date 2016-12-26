@@ -2,12 +2,16 @@ package de.rakuten.ecommerce.base.model;
 
 import java.util.Date;
 
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import de.rakuten.ecommerce.base.model.listener.AuditListener;
+
 @MappedSuperclass
+@EntityListeners(AuditListener.class)
 public abstract class AbstractEntity implements Entity {
 
 	private static final long serialVersionUID = 1L;

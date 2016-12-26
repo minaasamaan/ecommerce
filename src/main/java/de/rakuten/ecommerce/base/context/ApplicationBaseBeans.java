@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
  *
  */
 @Configuration
-// @EnableAspectJAutoProxy
 public class ApplicationBaseBeans {
 	@Bean
 	public RestTemplate restTemplate() {

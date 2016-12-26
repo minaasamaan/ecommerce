@@ -4,7 +4,9 @@
 package de.rakuten.ecommerce.base.manager;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+import de.rakuten.ecommerce.base.manager.exception.EntityNotFound;
 import de.rakuten.ecommerce.base.model.AbstractEntity;
 
 /**
@@ -13,6 +15,7 @@ import de.rakuten.ecommerce.base.model.AbstractEntity;
  * @author Mina
  *
  */
+@Transactional
 public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntity>
 		implements BusinessEntityManager<Entity> {
 
@@ -45,9 +48,14 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 * de.rakuten.ecommerce.base.manager.BusinessEntityManager#read(de.rakuten.
 	 * ecommerce.base.model.Entity)
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public Entity read(Long id) {
-		return getEntityRepository().findOne(id);
+		Entity entity = getEntityRepository().findOne(id);
+		if (entity == null) {
+			throw new EntityNotFound(id);
+		}
+		return entity;
 	}
 
 	/*
@@ -70,6 +78,8 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 */
 	@Override
 	public void delete(Entity entity) {
+		// Refresh entity
+		entity = read(entity.getId());
 		doBeforeDelete(entity);
 		getEntityRepository().delete(entity);
 	}

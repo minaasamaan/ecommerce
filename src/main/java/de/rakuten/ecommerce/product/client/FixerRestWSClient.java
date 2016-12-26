@@ -6,6 +6,7 @@ package de.rakuten.ecommerce.product.client;
 import org.springframework.stereotype.Component;
 
 import de.rakuten.ecommerce.base.client.AbstractRestServicesClient;
+import de.rakuten.ecommerce.product.client.exception.CurrencyNotSupported;
 import de.rakuten.ecommerce.product.dto.CurrencyDto;
 
 /**
@@ -21,9 +22,7 @@ public class FixerRestWSClient extends AbstractRestServicesClient {
 				getApplicationConfigurations().getDefaultProductCurrency(), currencyCode);
 
 		if (currencyDto == null || currencyDto.getRates() == null || currencyDto.getRates().isEmpty()) {
-			// throw new ClientException(null,
-			// CityServicesErrors.EMPTY_SEARCH_RESULT,
-			// CityServicesClient.class);
+			throw new CurrencyNotSupported(currencyCode);
 		}
 		return currencyDto.getRates().get(currencyCode);
 	}

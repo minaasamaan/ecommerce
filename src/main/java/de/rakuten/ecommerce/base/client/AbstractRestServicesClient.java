@@ -4,7 +4,6 @@
 package de.rakuten.ecommerce.base.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import de.rakuten.ecommerce.base.context.ApplicationConfigurations;
@@ -35,14 +34,7 @@ public abstract class AbstractRestServicesClient {
 	 * @return
 	 */
 	protected <T> T doGet(String serviceUrl, Class<T> clazz, Object... uriVariables) {
-		try {
-			return getRestTemplate().getForObject(getBaseUrl().append(serviceUrl).toString(), clazz, uriVariables);
-		} catch (RestClientException restClientException) {
-			// throw new ClientException(restClientException,
-			// ServiceClientErrors.BAD_GATEWAY, this.getClass());
-			return null;
-		}
-
+		return getRestTemplate().getForObject(getBaseUrl().append(serviceUrl).toString(), clazz, uriVariables);
 	}
 
 	/**

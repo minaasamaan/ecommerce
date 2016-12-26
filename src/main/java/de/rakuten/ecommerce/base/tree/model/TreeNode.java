@@ -1,6 +1,5 @@
 package de.rakuten.ecommerce.base.tree.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,14 +17,14 @@ public abstract class TreeNode<TN extends TreeNode<TN>> extends AbstractEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "parent_id")
+	@Column(name = "parent_id", insertable = false, updatable = false)
 	private Long parentId;
 
 	@ManyToOne
 	private TN parent;
 
 	@OneToMany(mappedBy = "parent")
-	private Set<TN> children = new HashSet<TN>();
+	private Set<TN> children;
 
 	public TN getParent() {
 		return parent;
