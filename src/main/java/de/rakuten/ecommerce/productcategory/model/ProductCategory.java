@@ -4,6 +4,7 @@
 package de.rakuten.ecommerce.productcategory.model;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 import de.rakuten.ecommerce.base.tree.model.TreeNode;
 
@@ -11,7 +12,7 @@ import de.rakuten.ecommerce.base.tree.model.TreeNode;
  * @author Mina
  *
  */
-@Entity(name = "product_category")
+@Entity
 public class ProductCategory extends TreeNode<ProductCategory> {
 
 	/**
@@ -19,6 +20,7 @@ public class ProductCategory extends TreeNode<ProductCategory> {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private String name;
 
 	private String description;
@@ -46,7 +48,8 @@ public class ProductCategory extends TreeNode<ProductCategory> {
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;

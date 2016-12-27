@@ -3,6 +3,8 @@
  */
 package de.rakuten.ecommerce.base.manager;
 
+import java.util.List;
+
 import de.rakuten.ecommerce.base.model.Entity;
 
 /**
@@ -15,7 +17,9 @@ public interface BusinessEntityManager<E extends Entity> {
 
 	E read(Long id);
 
+	List<E> readAll();
+
 	E update(E entity);
 
-	void delete(E entity);
+	void delete(Long id);
 }

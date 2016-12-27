@@ -4,6 +4,7 @@
 package de.rakuten.ecommerce.product.dto;
 
 import de.rakuten.ecommerce.base.dto.AbstractDto;
+import de.rakuten.ecommerce.productcategory.dto.ProductCategoryDto;
 
 /**
  * @author Mina
@@ -18,7 +19,7 @@ public class ProductDto extends AbstractDto {
 
 	private String name;
 
-	private String category;
+	private ProductCategoryDto productCategory;
 
 	private Double price;
 
@@ -37,21 +38,6 @@ public class ProductDto extends AbstractDto {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the category
-	 */
-	public String getCategory() {
-		return category;
-	}
-
-	/**
-	 * @param category
-	 *            the category to set
-	 */
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	/**
@@ -77,10 +63,26 @@ public class ProductDto extends AbstractDto {
 	}
 
 	/**
-	 * @param currency the currency to set
+	 * @param currency
+	 *            the currency to set
 	 */
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	/**
+	 * @return the productCategory
+	 */
+	public ProductCategoryDto getProductCategory() {
+		return productCategory;
+	}
+
+	/**
+	 * @param productCategory
+	 *            the productCategory to set
+	 */
+	public void setProductCategory(ProductCategoryDto productCategory) {
+		this.productCategory = productCategory;
 	}
 
 }

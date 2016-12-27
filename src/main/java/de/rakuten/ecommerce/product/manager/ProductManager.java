@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import de.rakuten.ecommerce.base.context.ApplicationConfigurations;
 import de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager;
 import de.rakuten.ecommerce.product.client.FixerRestWSClient;
+import de.rakuten.ecommerce.product.exception.MissingMandatoryProductCategory;
 import de.rakuten.ecommerce.product.model.Product;
 import de.rakuten.ecommerce.product.repository.ProductRepository;
+import de.rakuten.ecommerce.productcategory.manager.ProductCategoryManager;
 
 /**
  * @author Mina
@@ -28,8 +30,17 @@ public class ProductManager extends AbstractBusinessEntityManager<Product> {
 	@Autowired
 	private FixerRestWSClient fixerRestWSClient;
 
+	@Autowired
+	private ProductCategoryManager productCategoryManager;
+
 	@Override
 	protected void doBeforePersist(Product entity, boolean isNew) {
+		// Validate, then refresh product category using category id.
+		if (entity.getProductCategory() == null) {
+			throw new MissingMandatoryProductCategory();
+		}
+		entity.setProductCategory(getProductCategoryManager().read(entity.getProductCategory().getId()));
+
 		if (isNew) { // Create operation
 			String defaultCurrency = getApplicationConfigurations().getDefaultProductCurrency();
 			if (entity.getCurrency() != null && !entity.getCurrency().equalsIgnoreCase(defaultCurrency)) {
@@ -71,6 +82,32 @@ public class ProductManager extends AbstractBusinessEntityManager<Product> {
 	 */
 	public FixerRestWSClient getFixerRestWSClient() {
 		return fixerRestWSClient;
+	}
+
+	/**
+	 * @return the productCategoryManager
+	 */
+	public ProductCategoryManager getProductCategoryManager() {
+		return productCategoryManager;
+	}
+
+	/**
+	 * @param productCategoryManager
+	 *            the productCategoryManager to set
+	 */
+	public void setProductCategoryManager(ProductCategoryManager productCategoryManager) {
+		this.productCategoryManager = productCategoryManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager#
+	 * getEntityClass()
+	 */
+	@Override
+	protected Class<Product> getEntityClass() {
+		return Product.class;
 	}
 
 }

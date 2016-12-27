@@ -3,6 +3,8 @@
  */
 package de.rakuten.ecommerce.base.manager;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,12 +53,28 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	@Transactional(readOnly = true)
 	@Override
 	public Entity read(Long id) {
+
 		Entity entity = getEntityRepository().findOne(id);
 		if (entity == null) {
-			throw new EntityNotFound(id);
+			throw new EntityNotFound(id, getEntityClass());
 		}
 		return entity;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.rakuten.ecommerce.base.manager.BusinessEntityManager#read()
+	 */
+	@Override
+	public List<Entity> readAll() {
+		return getEntityRepository().findAll();
+	}
+
+	/**
+	 * @return
+	 */
+	protected abstract Class<Entity> getEntityClass();
 
 	/*
 	 * (non-Javadoc)
@@ -77,10 +95,11 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 * rakuten. ecommerce.base.model.Entity)
 	 */
 	@Override
-	public void delete(Entity entity) {
+	public void delete(Long id) {
 		// Refresh entity
-		entity = read(entity.getId());
+		Entity entity = read(id);
 		doBeforeDelete(entity);
 		getEntityRepository().delete(entity);
 	}
+
 }

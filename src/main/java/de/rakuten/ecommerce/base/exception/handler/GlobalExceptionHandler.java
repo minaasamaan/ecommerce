@@ -4,18 +4,17 @@
 package de.rakuten.ecommerce.base.exception.handler;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestClientException;
 
-import de.rakuten.ecommerce.base.exception.ApplicationErrorResponse;
 import de.rakuten.ecommerce.base.exception.ApplicationException;
 
 /**
@@ -25,30 +24,51 @@ import de.rakuten.ecommerce.base.exception.ApplicationException;
 @ControllerAdvice
 public final class GlobalExceptionHandler {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	private static final String NA = "NA";
 
 	@ExceptionHandler(ApplicationException.class)
-	public ResponseEntity<ApplicationErrorResponse> rulesForCustomerNotFound(HttpServletRequest req,
-			ApplicationException e) {
-		ApplicationErrorResponse error = new ApplicationErrorResponse(e.getMessage(), req.getRequestURI());
-		return new ResponseEntity<ApplicationErrorResponse>(error, e.getHttpStatus());
+	public ResponseEntity<ApplicationErrorResponse> applicationBusinessException(HttpServletRequest request,
+			ApplicationException exception) {
+		ApplicationErrorResponse error = new ApplicationErrorResponse(exception.getMessage(), NA,
+				request.getRequestURI());
+		return new ResponseEntity<ApplicationErrorResponse>(error, exception.getHttpStatus());
 	}
 
-	@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Data integrity violation")
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public void conflict() {
-		// Nothing to do
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ApplicationErrorResponse> validationException(HttpServletRequest request,
+			ConstraintViolationException exception) {
+		ApplicationErrorResponse response = ApplicationErrorResponse.getNewErrorResponse(request.getRequestURI());
+		exception.getConstraintViolations().forEach(violation -> response
+				.addNewError(violation.getPropertyPath() + " " + violation.getMessage(), violation.toString()));
+		return new ResponseEntity<ApplicationErrorResponse>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ApplicationErrorResponse> badRequestFormat(HttpServletRequest request,
+			HttpMessageNotReadableException exception) {
+		logError(request, exception);
+		ApplicationErrorResponse error = new ApplicationErrorResponse("Malformed REST request.", exception.getMessage(),
+				request.getRequestURI());
+		return new ResponseEntity<ApplicationErrorResponse>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler({ RestClientException.class })
-	@ResponseStatus(value = HttpStatus.BAD_GATEWAY, reason = "Error while contacting external service(s)")
-	public void clientServiceError(HttpServletRequest req, Exception ex) {
-		logError(req, ex);
+	public ResponseEntity<ApplicationErrorResponse> clientServiceError(HttpServletRequest request,
+			RestClientException exception) {
+		logError(request, exception);
+		ApplicationErrorResponse error = new ApplicationErrorResponse("Error while contacting external service(s).",
+				exception.getMessage(), request.getRequestURI());
+		return new ResponseEntity<ApplicationErrorResponse>(error, HttpStatus.BAD_GATEWAY);
 	}
 
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Unknown error")
-	@ExceptionHandler(Exception.class)
-	public void handleError(HttpServletRequest req, Exception ex) {
-		logError(req, ex);
+	@ExceptionHandler({ Throwable.class })
+	public ResponseEntity<ApplicationErrorResponse> generalError(HttpServletRequest request,
+			RestClientException exception) {
+		logError(request, exception);
+		ApplicationErrorResponse error = new ApplicationErrorResponse(
+				"Unknown error happened while server trying to fulfill the request.", exception.getMessage(),
+				request.getRequestURI());
+		return new ResponseEntity<ApplicationErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	private void logError(HttpServletRequest req, Exception ex) {

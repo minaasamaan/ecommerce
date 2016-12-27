@@ -4,6 +4,7 @@
 package de.rakuten.ecommerce.product.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
@@ -14,17 +15,15 @@ import de.rakuten.ecommerce.productcategory.model.ProductCategory;
  * @author Mina
  *
  */
-@Entity(name = "product")
+@Entity
 public class Product extends AbstractEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String name;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "product_category_id", nullable = false)
 	private ProductCategory productCategory;
 
 	private Double price;

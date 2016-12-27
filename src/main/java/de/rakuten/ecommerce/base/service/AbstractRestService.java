@@ -5,6 +5,8 @@ package de.rakuten.ecommerce.base.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +50,9 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	 * ecommerce.base.dto.Dto)
 	 */
 	@Override
-	public ResponseEntity<DTO> create(@RequestBody DTO dto) {
+	public ResponseEntity<DTO> create(@RequestBody DTO dto) throws URISyntaxException {
 		Entity entity = getBusinessManager().create(transform(dto));
-		try {
-			return ResponseEntity.created(new URI(getCrudURL() + entity.getId())).body(transform(entity));
-		} catch (URISyntaxException e) {
-			// TODO handle properly
-			e.printStackTrace();
-		}
-		return null;
+		return ResponseEntity.created(new URI(getCrudURL() + entity.getId())).body(transform(entity));
 	}
 
 	/*
@@ -68,6 +64,16 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	@Override
 	public ResponseEntity<DTO> read(@PathVariable Long id) {
 		return ResponseEntity.ok().body(transform(getBusinessManager().read(id)));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.rakuten.ecommerce.base.service.CRUDRestService#read()
+	 */
+	@Override
+	public ResponseEntity<List<DTO>> read() {
+		return ResponseEntity.ok().body(transform(getBusinessManager().readAll()));
 	}
 
 	/*
@@ -88,8 +94,8 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	 * ecommerce.base.dto.Dto)
 	 */
 	@Override
-	public ResponseEntity<?> delete(@RequestBody DTO dto) {
-		getBusinessManager().delete(transform(dto));
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		getBusinessManager().delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -99,5 +105,11 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 
 	protected DTO transform(Entity entity) {
 		return getMapper().map(entity, getDtoClazz());
+	}
+
+	@SuppressWarnings("unchecked")
+	protected List<DTO> transform(List<Entity> entityList) {
+		List<DTO> dtoList = Collections.emptyList();
+		return getMapper().map(entityList, dtoList.getClass());
 	}
 }
