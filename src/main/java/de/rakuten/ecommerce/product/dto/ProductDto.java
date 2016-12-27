@@ -3,6 +3,8 @@
  */
 package de.rakuten.ecommerce.product.dto;
 
+import javax.validation.constraints.NotNull;
+
 import de.rakuten.ecommerce.base.dto.AbstractDto;
 import de.rakuten.ecommerce.productcategory.dto.ProductCategoryDto;
 
@@ -17,10 +19,13 @@ public class ProductDto extends AbstractDto {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@NotNull(message = "Product name must be provided")
 	private String name;
 
+	@NotNull(message = "Product category must be provided")
 	private ProductCategoryDto productCategory;
 
+	@NotNull(message = "Product price must be provided")
 	private Double price;
 
 	private String currency;

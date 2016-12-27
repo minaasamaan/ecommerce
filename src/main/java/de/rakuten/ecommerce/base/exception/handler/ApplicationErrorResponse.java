@@ -23,8 +23,9 @@ public class ApplicationErrorResponse {
 	 * "http://dev.mwaysolutions.com/blog/api/v1/errors/12345" 08 } 09 ] 10 }
 	 * 
 	 */
-	public ApplicationErrorResponse(String userMessage, String internalMessage, String requestUri) {
-		this.setRequestUri(requestUri);
+	public ApplicationErrorResponse(String userMessage, String internalMessage, String requestHttpMethod,
+			String requestUri) {
+		this.setRequestUri(requestHttpMethod + " " + requestUri);
 		this.addNewError(userMessage, internalMessage);
 	}
 
@@ -41,8 +42,8 @@ public class ApplicationErrorResponse {
 		return this;
 	}
 
-	public static ApplicationErrorResponse getNewErrorResponse(String requestUri) {
-		return new ApplicationErrorResponse(requestUri);
+	public static ApplicationErrorResponse getNewErrorResponse(String requestHttpMethod, String requestUri) {
+		return new ApplicationErrorResponse(requestHttpMethod + " " + requestUri);
 	}
 
 	protected static class ErrorInfo {

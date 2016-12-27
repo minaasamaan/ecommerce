@@ -3,6 +3,8 @@
  */
 package de.rakuten.ecommerce.productcategory.dto;
 
+import javax.validation.constraints.NotNull;
+
 import de.rakuten.ecommerce.base.tree.dto.TreeNodeDto;
 
 /**
@@ -16,6 +18,7 @@ public class ProductCategoryDto extends TreeNodeDto<ProductCategoryDto> {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@NotNull(message = "Product category name must be provided.")
 	private String name;
 
 	private String description;
@@ -43,7 +46,8 @@ public class ProductCategoryDto extends TreeNodeDto<ProductCategoryDto> {
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;

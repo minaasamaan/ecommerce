@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestClientException;
@@ -29,15 +30,26 @@ public final class GlobalExceptionHandler {
 	@ExceptionHandler(ApplicationException.class)
 	public ResponseEntity<ApplicationErrorResponse> applicationBusinessException(HttpServletRequest request,
 			ApplicationException exception) {
-		ApplicationErrorResponse error = new ApplicationErrorResponse(exception.getMessage(), NA,
+		ApplicationErrorResponse error = new ApplicationErrorResponse(exception.getMessage(), NA, request.getMethod(),
 				request.getRequestURI());
 		return new ResponseEntity<ApplicationErrorResponse>(error, exception.getHttpStatus());
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ApplicationErrorResponse> validationException(HttpServletRequest request,
+			MethodArgumentNotValidException exception) {
+		ApplicationErrorResponse response = ApplicationErrorResponse.getNewErrorResponse(request.getMethod(),
+				request.getRequestURI());
+		exception.getBindingResult().getAllErrors()
+				.forEach(error -> response.addNewError(error.getDefaultMessage(), error.toString()));
+		return new ResponseEntity<ApplicationErrorResponse>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<ApplicationErrorResponse> validationException(HttpServletRequest request,
 			ConstraintViolationException exception) {
-		ApplicationErrorResponse response = ApplicationErrorResponse.getNewErrorResponse(request.getRequestURI());
+		ApplicationErrorResponse response = ApplicationErrorResponse.getNewErrorResponse(request.getMethod(),
+				request.getRequestURI());
 		exception.getConstraintViolations().forEach(violation -> response
 				.addNewError(violation.getPropertyPath() + " " + violation.getMessage(), violation.toString()));
 		return new ResponseEntity<ApplicationErrorResponse>(response, HttpStatus.BAD_REQUEST);
@@ -48,7 +60,7 @@ public final class GlobalExceptionHandler {
 			HttpMessageNotReadableException exception) {
 		logError(request, exception);
 		ApplicationErrorResponse error = new ApplicationErrorResponse("Malformed REST request.", exception.getMessage(),
-				request.getRequestURI());
+				request.getMethod(), request.getRequestURI());
 		return new ResponseEntity<ApplicationErrorResponse>(error, HttpStatus.BAD_REQUEST);
 	}
 
@@ -57,21 +69,20 @@ public final class GlobalExceptionHandler {
 			RestClientException exception) {
 		logError(request, exception);
 		ApplicationErrorResponse error = new ApplicationErrorResponse("Error while contacting external service(s).",
-				exception.getMessage(), request.getRequestURI());
+				exception.getMessage(), request.getMethod(), request.getRequestURI());
 		return new ResponseEntity<ApplicationErrorResponse>(error, HttpStatus.BAD_GATEWAY);
 	}
 
 	@ExceptionHandler({ Throwable.class })
-	public ResponseEntity<ApplicationErrorResponse> generalError(HttpServletRequest request,
-			RestClientException exception) {
+	public ResponseEntity<ApplicationErrorResponse> generalError(HttpServletRequest request, Throwable exception) {
 		logError(request, exception);
 		ApplicationErrorResponse error = new ApplicationErrorResponse(
 				"Unknown error happened while server trying to fulfill the request.", exception.getMessage(),
-				request.getRequestURI());
+				request.getMethod(), request.getRequestURI());
 		return new ResponseEntity<ApplicationErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	private void logError(HttpServletRequest req, Exception ex) {
+	private void logError(HttpServletRequest req, Throwable ex) {
 		logger.error("Request: " + req.getRequestURL() + " raised " + ex);
 	}
 }

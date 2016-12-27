@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import de.rakuten.ecommerce.base.model.AbstractEntity;
 import de.rakuten.ecommerce.productcategory.model.ProductCategory;
@@ -20,12 +21,15 @@ public class Product extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private String name;
 
+	@NotNull
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "product_category_id", nullable = false)
+	@JoinColumn(name = "product_category_id")
 	private ProductCategory productCategory;
 
+	@NotNull
 	private Double price;
 
 	@Transient

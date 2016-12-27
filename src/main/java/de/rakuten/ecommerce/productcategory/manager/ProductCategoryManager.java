@@ -5,7 +5,9 @@ package de.rakuten.ecommerce.productcategory.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import de.rakuten.ecommerce.base.manager.exception.EntityNotFound;
 import de.rakuten.ecommerce.base.tree.manager.AbstractTreeNodeManager;
 import de.rakuten.ecommerce.product.repository.ProductRepository;
 import de.rakuten.ecommerce.productcategory.manager.exception.CannotDeleteCategoryAssignedToProducts;
@@ -17,6 +19,7 @@ import de.rakuten.ecommerce.productcategory.repository.ProductCategoryRepository
  *
  */
 @Service
+@Validated
 public class ProductCategoryManager extends AbstractTreeNodeManager<ProductCategory> {
 
 	@Autowired
@@ -34,6 +37,15 @@ public class ProductCategoryManager extends AbstractTreeNodeManager<ProductCateg
 	@Override
 	public ProductCategoryRepository getEntityRepository() {
 		return productCategoryRepository;
+	}
+
+	@Override
+	public ProductCategory update(@Validated ProductCategory entity) {
+		if (!getEntityRepository().exists(entity.getId())) {
+			throw new EntityNotFound(entity.getId(), getEntityClass());
+		}
+		doBeforePersist(entity, false);
+		return getEntityRepository().saveAndFlush(entity);
 	}
 
 	@Override

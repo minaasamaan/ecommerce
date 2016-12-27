@@ -5,11 +5,16 @@ package de.rakuten.ecommerce.base.manager;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import de.rakuten.ecommerce.base.manager.exception.EntityNotFound;
 import de.rakuten.ecommerce.base.model.AbstractEntity;
+import de.rakuten.ecommerce.base.validation.CrudValidationGroup.Create;
+import de.rakuten.ecommerce.base.validation.CrudValidationGroup.Update;
 
 /**
  * Parent for all business managers in the application.
@@ -18,6 +23,7 @@ import de.rakuten.ecommerce.base.model.AbstractEntity;
  *
  */
 @Transactional
+@Validated
 public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntity>
 		implements BusinessEntityManager<Entity> {
 
@@ -38,7 +44,7 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 * rakuten. ecommerce.base.model.Entity)
 	 */
 	@Override
-	public Entity create(Entity entity) {
+	public Entity create(@Validated(value = Create.class) Entity entity) {
 		doBeforePersist(entity, true);
 		return getEntityRepository().saveAndFlush(entity);
 	}
@@ -52,7 +58,7 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public Entity read(Long id) {
+	public Entity read(@NotNull Long id) {
 
 		Entity entity = getEntityRepository().findOne(id);
 		if (entity == null) {
@@ -66,15 +72,11 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 * 
 	 * @see de.rakuten.ecommerce.base.manager.BusinessEntityManager#read()
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public List<Entity> readAll() {
 		return getEntityRepository().findAll();
 	}
-
-	/**
-	 * @return
-	 */
-	protected abstract Class<Entity> getEntityClass();
 
 	/*
 	 * (non-Javadoc)
@@ -83,7 +85,10 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 * rakuten. ecommerce.base.model.Entity)
 	 */
 	@Override
-	public Entity update(Entity entity) {
+	public Entity update(@Validated(value = Update.class) Entity entity) {
+		if (!getEntityRepository().exists(entity.getId())) {
+			throw new EntityNotFound(entity.getId(), getEntityClass());
+		}
 		doBeforePersist(entity, false);
 		return getEntityRepository().saveAndFlush(entity);
 	}
@@ -95,11 +100,16 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	 * rakuten. ecommerce.base.model.Entity)
 	 */
 	@Override
-	public void delete(Long id) {
+	public void delete(@NotNull Long id) {
 		// Refresh entity
 		Entity entity = read(id);
 		doBeforeDelete(entity);
 		getEntityRepository().delete(entity);
 	}
+
+	/**
+	 * @return
+	 */
+	protected abstract Class<Entity> getEntityClass();
 
 }

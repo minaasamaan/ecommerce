@@ -8,15 +8,20 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import de.rakuten.ecommerce.base.dto.AbstractDto;
 import de.rakuten.ecommerce.base.manager.BusinessEntityManager;
 import de.rakuten.ecommerce.base.model.AbstractEntity;
+import de.rakuten.ecommerce.base.validation.CrudValidationGroup.Create;
+import de.rakuten.ecommerce.base.validation.CrudValidationGroup.Update;
 
 /**
  * @author Mina
@@ -50,7 +55,7 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	 * ecommerce.base.dto.Dto)
 	 */
 	@Override
-	public ResponseEntity<DTO> create(@RequestBody DTO dto) throws URISyntaxException {
+	public ResponseEntity<DTO> create(@Validated(value = Create.class) @RequestBody DTO dto) throws URISyntaxException {
 		Entity entity = getBusinessManager().create(transform(dto));
 		return ResponseEntity.created(new URI(getCrudURL() + entity.getId())).body(transform(entity));
 	}
@@ -62,7 +67,7 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	 * de.rakuten.ecommerce.base.service.CRUDRestService#read(java.lang.String)
 	 */
 	@Override
-	public ResponseEntity<DTO> read(@PathVariable Long id) {
+	public ResponseEntity<DTO> read(@NotNull @PathVariable Long id) {
 		return ResponseEntity.ok().body(transform(getBusinessManager().read(id)));
 	}
 
@@ -83,7 +88,7 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	 * ecommerce.base.dto.Dto)
 	 */
 	@Override
-	public ResponseEntity<DTO> update(@RequestBody DTO dto) {
+	public ResponseEntity<DTO> update(@Validated(value = Update.class) @RequestBody DTO dto) {
 		return ResponseEntity.ok().body(transform(getBusinessManager().update(transform(dto))));
 	}
 
@@ -94,7 +99,7 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	 * ecommerce.base.dto.Dto)
 	 */
 	@Override
-	public ResponseEntity<?> delete(@PathVariable Long id) {
+	public ResponseEntity<?> delete(@NotNull @PathVariable Long id) {
 		getBusinessManager().delete(id);
 		return ResponseEntity.noContent().build();
 	}

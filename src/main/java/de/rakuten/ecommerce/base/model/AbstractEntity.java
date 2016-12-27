@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import de.rakuten.ecommerce.base.model.listener.AuditListener;
 
@@ -20,10 +21,13 @@ public abstract class AbstractEntity implements Entity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotNull
 	private Date creationDate;
 
+	@NotNull
 	private Date lastModifiedDate;
 
+	@NotNull
 	private String lastModifiedBy;
 
 	public Long getId() {
