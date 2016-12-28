@@ -1,4 +1,4 @@
-package de.rakuten.ecommerce.base.security;
+package de.rakuten.ecommerce.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
