@@ -9,24 +9,30 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import de.rakuten.ecommerce.base.model.AbstractEntity;
-import de.rakuten.ecommerce.base.security.util.SecurityUtil;
+import de.rakuten.ecommerce.security.util.SecurityUtil;
 
 /**
  * @author Mina
  *
  */
 public class AuditListener {
+	private static final String SYSTEM = "SYSTEM";
+
 	@PrePersist
 	private void beforePersist(AbstractEntity entity) {
 		Date now = new Date();
 		entity.setCreationDate(now);
 		entity.setLastModifiedDate(now);
-		entity.setLastModifiedBy(SecurityUtil.getCurrentAthenticatedUser());
+		if (entity.getLastModifiedBy() == null || !entity.getLastModifiedBy().equals(SYSTEM)) {
+			entity.setLastModifiedBy(SecurityUtil.getCurrentAthenticatedUser());
+		}
 	}
 
 	@PreUpdate
 	private void beforeUpdate(AbstractEntity entity) {
 		entity.setLastModifiedDate(new Date());
-		entity.setLastModifiedBy(SecurityUtil.getCurrentAthenticatedUser());
+		if (entity.getLastModifiedBy() == null || !entity.getLastModifiedBy().equals(SYSTEM)) {
+			entity.setLastModifiedBy(SecurityUtil.getCurrentAthenticatedUser());
+		}
 	}
 }

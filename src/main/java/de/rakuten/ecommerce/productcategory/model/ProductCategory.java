@@ -4,6 +4,7 @@
 package de.rakuten.ecommerce.productcategory.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import de.rakuten.ecommerce.base.tree.model.TreeNode;
@@ -13,6 +14,7 @@ import de.rakuten.ecommerce.base.tree.model.TreeNode;
  *
  */
 @Entity
+@Table(name = "product_category")
 public class ProductCategory extends TreeNode<ProductCategory> {
 
 	/**

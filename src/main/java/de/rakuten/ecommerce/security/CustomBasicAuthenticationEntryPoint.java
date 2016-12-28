@@ -1,4 +1,4 @@
-package de.rakuten.ecommerce.base.security;
+package de.rakuten.ecommerce.security;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +25,7 @@ public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		setRealmName("MY_TEST_REALM");
+		setRealmName("RAKUTEN_ECOMMERCE_REST_API");
 		super.afterPropertiesSet();
 	}
 }

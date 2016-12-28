@@ -21,6 +21,15 @@ public class ApplicationConfigurations {
 	@Value("${application.ecommerce.product.default_currency}")
 	private String defaultProductCurrency;
 
+	@Value("${application.ecommerce.security.create_default_super_user}")
+	private Boolean createDefaultSuperUser;
+
+	@Value("${application.ecommerce.security.super_user.name}")
+	private String superUserName;
+
+	@Value("${application.ecommerce.security.super_user.password}")
+	private String superUserPassword;
+
 	public StringBuilder getCurrencyExchangeRateApiBaseUrl() {
 		return new StringBuilder(apiBaseUrl);
 	}
@@ -29,4 +38,15 @@ public class ApplicationConfigurations {
 		return defaultProductCurrency;
 	}
 
+	public Boolean isCreateDefaultSuperUser() {
+		return createDefaultSuperUser;
+	}
+
+	public String getSuperUserName() {
+		return superUserName;
+	}
+
+	public String getSuperUserPassword() {
+		return superUserPassword;
+	}
 }
