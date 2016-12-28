@@ -3,8 +3,6 @@
  */
 package de.rakuten.ecommerce.base.tree.manager;
 
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager;
 import de.rakuten.ecommerce.base.tree.exception.CannotDeleteNonLeafNodes;
 import de.rakuten.ecommerce.base.tree.model.TreeNode;
@@ -29,7 +27,6 @@ public abstract class AbstractTreeNodeManager<Node extends TreeNode<Node>> exten
 
 	@Override
 	protected void doBeforeDelete(Node node) {
-		TransactionSynchronizationManager.isActualTransactionActive();
 		if (node.getChildren() != null && !node.getChildren().isEmpty()) {
 			throw new CannotDeleteNonLeafNodes(node.getId());
 		}

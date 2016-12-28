@@ -3,9 +3,9 @@
  */
 package de.rakuten.ecommerce.base.service;
 
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -40,6 +40,8 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 	public abstract Class<Entity> getEntityClazz();
 
 	protected abstract String getCrudURL();
+
+	protected abstract Type getDtoListType();
 
 	/**
 	 * @return the mapper
@@ -112,9 +114,8 @@ public abstract class AbstractRestService<DTO extends AbstractDto, Entity extend
 		return getMapper().map(entity, getDtoClazz());
 	}
 
-	@SuppressWarnings("unchecked")
 	protected List<DTO> transform(List<Entity> entityList) {
-		List<DTO> dtoList = Collections.emptyList();
-		return getMapper().map(entityList, dtoList.getClass());
+		return getMapper().map(entityList, getDtoListType());
 	}
+
 }

@@ -3,6 +3,10 @@
  */
 package de.rakuten.ecommerce.productcategory.service;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +72,18 @@ public class ProductCategoryServiceImpl extends AbstractRestService<ProductCateg
 	@Override
 	protected String getCrudURL() {
 		return "/api/v1/category/";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.rakuten.ecommerce.base.service.AbstractRestService#getDtoListType()
+	 */
+	@Override
+	protected Type getDtoListType() {
+		return new TypeToken<List<ProductCategoryDto>>() {
+		}.getType();
 	}
 
 }

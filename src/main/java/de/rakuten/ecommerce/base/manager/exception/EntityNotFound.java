@@ -23,6 +23,13 @@ public class EntityNotFound extends ApplicationException {
 	}
 
 	/**
+	 * @param entityClass
+	 */
+	public EntityNotFound(Class<? extends AbstractEntity> entityClass) {
+		super(HttpStatus.NOT_FOUND, "Couldn't find entities(" + entityClass.getName() + ")");
+	}
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;

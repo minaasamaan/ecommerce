@@ -75,7 +75,11 @@ public abstract class AbstractBusinessEntityManager<Entity extends AbstractEntit
 	@Transactional(readOnly = true)
 	@Override
 	public List<Entity> readAll() {
-		return getEntityRepository().findAll();
+		List<Entity> entities = getEntityRepository().findAll();
+		if (entities == null || entities.isEmpty()) {
+			throw new EntityNotFound(getEntityClass());
+		}
+		return entities;
 	}
 
 	/*

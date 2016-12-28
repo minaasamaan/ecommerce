@@ -3,6 +3,10 @@
  */
 package de.rakuten.ecommerce.product.service;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,4 +73,15 @@ public class ProductServiceImpl extends AbstractRestService<ProductDto, Product>
 		return "/api/v1/product/";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.rakuten.ecommerce.base.service.AbstractRestService#getDtoListType()
+	 */
+	@Override
+	protected Type getDtoListType() {
+		return new TypeToken<List<ProductDto>>() {
+		}.getType();
+	}
 }

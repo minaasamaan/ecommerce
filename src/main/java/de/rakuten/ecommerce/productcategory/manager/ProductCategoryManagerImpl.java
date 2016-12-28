@@ -19,7 +19,8 @@ import de.rakuten.ecommerce.productcategory.repository.ProductCategoryRepository
  */
 @Service
 @Validated
-public class ProductCategoryManagerImpl extends AbstractTreeNodeManager<ProductCategory> {
+public class ProductCategoryManagerImpl extends AbstractTreeNodeManager<ProductCategory>
+		implements ProductCategoryManager {
 
 	@Autowired
 	private ProductCategoryRepository productCategoryRepository;
