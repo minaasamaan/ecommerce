@@ -41,13 +41,13 @@ public class ProductCategoryManagerImpl extends AbstractTreeNodeManager<ProductC
 
 	@Override
 	protected void doBeforeDelete(ProductCategory productCategory) {
+		super.doBeforeDelete(productCategory);
 		// check here if category has any products already, and hence it
 		// can't
 		// be deleted, throw CannotDeleteCategoryAssignedToProducts
 		if (getProductRepository().getAssignedProductsCountToCategory(productCategory.getId()) > 0) {
 			throw new CannotDeleteCategoryAssignedToProducts(productCategory.getId());
 		}
-		super.doBeforeDelete(productCategory);
 	}
 
 	/*

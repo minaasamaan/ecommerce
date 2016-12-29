@@ -3,6 +3,8 @@
  */
 package de.rakuten.ecommerce.builder.category;
 
+import java.util.HashSet;
+
 import de.rakuten.ecommerce.productcategory.model.ProductCategory;
 
 /**
@@ -34,6 +36,14 @@ public class ProductCategoryBuilder {
 
 	public ProductCategoryBuilder parent(ProductCategory parent) {
 		entity.setParent(parent);
+		return this;
+	}
+
+	public ProductCategoryBuilder addToChildren(ProductCategory child) {
+		if (entity.getChildren() == null) {
+			entity.setChildren(new HashSet<>());
+		}
+		entity.getChildren().add(child);
 		return this;
 	}
 
