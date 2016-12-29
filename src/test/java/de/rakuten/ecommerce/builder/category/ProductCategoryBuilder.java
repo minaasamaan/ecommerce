@@ -32,6 +32,11 @@ public class ProductCategoryBuilder {
 		return this;
 	}
 
+	public ProductCategoryBuilder parent(ProductCategory parent) {
+		entity.setParent(parent);
+		return this;
+	}
+
 	public ProductCategory build() {
 		return entity;
 	}
