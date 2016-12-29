@@ -23,7 +23,7 @@ public class MissingMandatoryProductCategory extends ApplicationException {
 	 * @param message
 	 */
 	public MissingMandatoryProductCategory() {
-		super(HttpStatus.UNPROCESSABLE_ENTITY, "Missing the mandatory product category in the provided request.");
+		super(HttpStatus.PRECONDITION_REQUIRED, "Missing the mandatory product category in the provided request.");
 	}
 
 }

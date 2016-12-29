@@ -9,6 +9,16 @@ import javax.persistence.OneToMany;
 
 import de.rakuten.ecommerce.base.model.AbstractEntity;
 
+/**
+ * Parent class for tree hierarchy implementation. However, this basic
+ * implementation has been adopted for simplicity, a more efficient approach
+ * would be adopting the Nested Set Model,
+ * {@link https://en.wikipedia.org/wiki/Nested_set_model}
+ * 
+ * @author Mina
+ *
+ * @param <TN>
+ */
 @MappedSuperclass
 public abstract class TreeNode<TN extends TreeNode<TN>> extends AbstractEntity {
 
@@ -21,7 +31,9 @@ public abstract class TreeNode<TN extends TreeNode<TN>> extends AbstractEntity {
 	private Long parentId;
 
 	@ManyToOne
-	private TN parent;
+	private TN parent; // fetch type left to the default "EAGER", because it's
+						// future requirement to get path up to root. So, eager
+						// fetching here is more efficient.
 
 	@OneToMany(mappedBy = "parent")
 	private Set<TN> children;

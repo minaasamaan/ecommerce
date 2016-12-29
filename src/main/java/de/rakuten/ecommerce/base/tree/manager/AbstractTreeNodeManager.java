@@ -3,8 +3,12 @@
  */
 package de.rakuten.ecommerce.base.tree.manager;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import de.rakuten.ecommerce.base.manager.AbstractBusinessEntityManager;
 import de.rakuten.ecommerce.base.tree.exception.CannotDeleteNonLeafNodes;
+import de.rakuten.ecommerce.base.tree.exception.CyclicHierarchyDetected;
 import de.rakuten.ecommerce.base.tree.model.TreeNode;
 
 /**
@@ -21,7 +25,28 @@ public abstract class AbstractTreeNodeManager<Node extends TreeNode<Node>> exten
 		if (node.getParentId() != null) {
 			// Ensure parent exists, inject it in the entity
 			Node parent = read(node.getParentId());
+			if (!isNew) {
+				// Node already exists in DB, new nodes cannot make
+				// cycles.
+				checkForPotentialCycle(node, parent);
+			}
 			node.setParent(parent);
+		}
+	}
+
+	/**
+	 * @param node
+	 * @param parent
+	 */
+	protected void checkForPotentialCycle(Node node, Node parent) {
+		Set<Node> pathToMostParent = new LinkedHashSet<>();
+		Node cursor = parent;
+		do {
+			pathToMostParent.add(cursor);
+			cursor = cursor.getParent();
+		} while (cursor != null);
+		if (pathToMostParent.contains(node)) {
+			throw new CyclicHierarchyDetected(node.getId(), parent.getId());
 		}
 	}
 

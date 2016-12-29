@@ -32,6 +32,8 @@ public class Product extends AbstractEntity {
 	@NotNull
 	private Double price;
 
+	private String description;
+
 	@Transient
 	private String currency;
 
@@ -93,6 +95,21 @@ public class Product extends AbstractEntity {
 	 */
 	public void setProductCategory(ProductCategory productCategory) {
 		this.productCategory = productCategory;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

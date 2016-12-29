@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.rakuten.ecommerce.unit.productcategory.service;
+package de.rakuten.ecommerce.unittesting.productcategory.service;
 
 import static com.googlecode.catchexception.CatchException.caughtException;
 import static com.googlecode.catchexception.apis.BDDCatchException.thenThrown;
@@ -29,7 +29,7 @@ import org.springframework.http.ResponseEntity;
 
 import de.rakuten.ecommerce.base.manager.exception.EntityNotFound;
 import de.rakuten.ecommerce.base.tree.exception.CannotDeleteNonLeafNodes;
-import de.rakuten.ecommerce.builder.ProductCategoryBuilder;
+import de.rakuten.ecommerce.builder.category.ProductCategoryBuilder;
 import de.rakuten.ecommerce.productcategory.dto.ProductCategoryDto;
 import de.rakuten.ecommerce.productcategory.manager.ProductCategoryManager;
 import de.rakuten.ecommerce.productcategory.manager.exception.CannotDeleteCategoryAssignedToProducts;

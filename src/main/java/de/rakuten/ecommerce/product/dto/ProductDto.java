@@ -28,6 +28,8 @@ public class ProductDto extends AbstractDto {
 	@NotNull(message = "Product price must be provided")
 	private Double price;
 
+	private String description;
+
 	private String currency;
 
 	/**
@@ -88,6 +90,20 @@ public class ProductDto extends AbstractDto {
 	 */
 	public void setProductCategory(ProductCategoryDto productCategory) {
 		this.productCategory = productCategory;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

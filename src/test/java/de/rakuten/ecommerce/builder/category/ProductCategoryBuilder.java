@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.rakuten.ecommerce.builder;
+package de.rakuten.ecommerce.builder.category;
 
 import de.rakuten.ecommerce.productcategory.model.ProductCategory;
 
