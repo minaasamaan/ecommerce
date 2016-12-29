@@ -34,9 +34,9 @@ public class SwaggerSpringConfig extends WebMvcConfigurerAdapter {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("TITLE").description("DESCRIPTION").version("VERSION")
-				.termsOfServiceUrl("http://terms-of-services.url").license("LICENSE")
-				.licenseUrl("http://url-to-license.com").build();
+		return new ApiInfoBuilder().title("Rakuten Products Management Solution")
+				.description("Rest API for managing products &amp; categories in a secured context").version("V1")
+				.build();
 	}
 
 	@Override

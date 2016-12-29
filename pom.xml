@@ -2,12 +2,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hellokoding</groupId>
-	<artifactId>account</artifactId>
+	<groupId>de.rakuten</groupId>
+	<artifactId>rakuten-ecommerce</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>Account Registration Webapp</name>
-	<url>http://maven.apache.org</url>
+	<name>Rakuten e-commerce</name>
 	<properties>
 		<spring.version>4.2.0.RELEASE</spring.version>
 		<spring-security.version>4.0.2.RELEASE</spring-security.version>
@@ -192,7 +191,7 @@
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>
-						<contextPath>/</contextPath>
+						<contextPath>rakuten-ecommerce/</contextPath>
 					</webApp>
 				</configuration>
 			</plugin>

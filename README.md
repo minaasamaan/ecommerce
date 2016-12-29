@@ -16,4 +16,4 @@ Rest API for managing products &amp; categories in a secured context
 - MySQL
 
 ## Run
-Deploy on any web server, run https://localhost:8443/account/swagger-ui.html
+Deploy on any web server, run https://localhost:8443/rakuten-ecommerce/swagger-ui.html
