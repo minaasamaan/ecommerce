@@ -19,14 +19,14 @@ public class EntityNotFound extends ApplicationException {
 	 * @param message
 	 */
 	public EntityNotFound(Long entityId, Class<? extends AbstractEntity> entityClass) {
-		super(HttpStatus.NOT_FOUND, "Couldn't find entity(" + entityClass.getName() + ") with id: " + entityId);
+		super(HttpStatus.NOT_FOUND, "Couldn't find entity(" + entityClass.getSimpleName() + ") with id: " + entityId);
 	}
 
 	/**
 	 * @param entityClass
 	 */
 	public EntityNotFound(Class<? extends AbstractEntity> entityClass) {
-		super(HttpStatus.NOT_FOUND, "Couldn't find entities(" + entityClass.getName() + ")");
+		super(HttpStatus.NOT_FOUND, "Couldn't find entities(" + entityClass.getSimpleName() + ")");
 	}
 
 	/**
